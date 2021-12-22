@@ -1,0 +1,58 @@
+{
+  "description": "Default Schema Example",
+  "type": "object",
+  "properties": {
+    "numericFields": {
+      "description": "This is numeric input (min 1, max 256)",
+      "type": "integer",
+      "minLength": 256
+    },
+    "stringField": {
+      "description": "This is string input",
+      "type": "string"
+    },
+    "singleSelectField": {
+      "description": "This is <select> input",
+      "type": "string",
+      "enum": [
+        "So",
+        "Many",
+        "options"
+      ]
+    },
+    "singleRadioField": {
+      "type": "string",
+      "description": "This is radio input",
+      "enum": [
+        "I",
+        "AM",
+        "RADIO"
+      ]
+    },
+    "multiSelectField": {
+      "type": "array",
+      "items": {
+        "properties": {
+          "firstname": {
+            "type": "boolean"
+          },
+          "lastname": {
+            "type": "boolean"
+          },
+          "email": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    "checkboxField": {
+      "type": "boolean",
+      "description": "This is boolean input"
+    },
+    "date": {
+      "type": "string",
+      "description": "This is date-time input",
+      "format": "date-time"
+    }
+  }
+}
