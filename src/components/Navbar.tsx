@@ -1,35 +1,40 @@
 import React, {FC} from 'react';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import Container from '@mui/material/Container';
-import Button from '@mui/material/Button';
+import {Button, AppBar, Box, Toolbar, Container} from '@mui/material';
 
-const pages = ['Dashboard', 'Create Schema'];
 
 interface IProps {
-    setToggle: (b: boolean) => void;
+    links: Array<any>
+    setToggle?: (b: boolean) => void;
+    setSchema?: (obj: any) => void;
 }
 
-const ResponsiveAppBar: FC<IProps> = ({setToggle}: IProps) => {
+
+const ResponsiveAppBar: FC<IProps> = ({setToggle, links, setSchema}: IProps) => {
+    const setStage = (link: string) => {
+        if (link === 'Dashboard') {
+            if (setToggle) {
+                setToggle(false);
+            }
+        } else if (link === 'Create Schema') {
+            if (setToggle) {
+                setToggle(true);
+            }
+        } else if (link === 'User Dashboard') {
+            if (setSchema) {
+                setSchema({properties: {}})
+            }
+        }
+    }
     return (
         <AppBar position="static">
             <Container maxWidth="xl">
-                <Toolbar disableGutters>
-                    <Box sx={{flexGrow: 1, display: {xs: 'none', md: 'flex'}}}>
-                        {pages.map((page) => (
-                            <Button
-                                key={page}
-                                sx={{my: 2, color: 'white', display: 'block'}}
-                                onClick={() => {
-                                    if (page === 'Dashboard') {
-                                        setToggle(false);
-                                    } else if (page === 'Create Schema') {
-                                        setToggle(true);
-                                    }
-                                }}
+                <Toolbar>
+                    <Box sx={{display: 'flex'}}>
+                        {links.map((link) => (
+                            <Button key={link} sx={{my: 2, color: 'white', display: 'block'}}
+                                    onClick={() => setStage(link)}
                             >
-                                {page}
+                                {link}
                             </Button>
                         ))}
                     </Box>

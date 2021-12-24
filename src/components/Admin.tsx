@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, {useEffect, useState} from "react";
 import {
     Container,
     Table,
@@ -15,7 +15,6 @@ import {
 } from "@material-ui/core";
 import {JsonForms} from '@jsonforms/react';
 import {materialCells, materialRenderers,} from '@jsonforms/material-renderers';
-import {useEffect, useState} from "react";
 import schema from '../schemas/schema.json';
 import axios from "axios";
 import {Alert} from "@mui/material";
@@ -24,10 +23,11 @@ import Navbar from "./Navbar";
 
 const Admin = () => {
     const [name, setName] = useState('');
+    const [description, setDescription] = useState('');
     const [separator, setSeparator] = useState('');
     const [success, setSuccess] = useState(false);
     const [error, setError] = useState('');
-    const [schemas, setSchemas] = useState([{name: "", separator: "", createdAt: ""}]);
+    const [schemas, setSchemas] = useState([{name: "", description: "", separator: "", createdAt: ""}]);
     const [schemaData, setSchemaData] = useState(schema);
     const [uiSchemaData, setUiSchemaData] = useState({});
     const [schemaObj, setSchemaObj] = useState({});
@@ -35,12 +35,14 @@ const Admin = () => {
     useEffect(() => {
         (async () => {
             try {
-                const data = (await axios.get('http://localhost:5000/api/all')).data;
-                setSchemas(data);
+                const data = (await axios.get('http://localhost:5000/api/admin/all')).data;
+                if (data.length) {
+                    setSchemas(data);
+                }
             } catch (e: any) {
                 setError(e.response.data);
             }
-        })()
+        })();
         const object = Object.keys(schemaObj).length ? schemaObj : schema;
         // @ts-ignore
         setSchemaData(object);
@@ -111,9 +113,9 @@ const Admin = () => {
         return elements;
     }
     const onSubmit = async () => {
-        const data = {name, separator, schema: schemaData};
+        const data = {name, separator, description, schema: schemaData};
         try {
-            (await axios.post('http://localhost:5000/api/add', data));
+            (await axios.post('http://localhost:5000/api/admin/add', data));
             setError('');
             setSuccess(true);
         } catch (e: any) {
@@ -123,100 +125,103 @@ const Admin = () => {
     }
     return (
         <>
-            <Navbar setToggle={setToggle}/>
-            {
-                !toggle ?
-                    <Container maxWidth={'md'}>
-                        {error ? <Alert severity="error" onClose={() => setError('')}>{error}</Alert> : null}
-                        <TableContainer component={Paper} style={{marginTop: 50}}>
-                            <Table>
-                                <TableHead>
-                                    <TableRow style={{}}>
-                                        <TableCell>#</TableCell>
-                                        <TableCell align="right">Name</TableCell>
-                                        <TableCell align="right">Separator</TableCell>
-                                        <TableCell align="right">Created At</TableCell>
+            <Navbar links={['Dashboard', 'Create Schema']} setToggle={setToggle}/>
+            {!toggle ?
+                <Container maxWidth={'md'}>
+                    {error ? <Alert severity="error" onClose={() => setError('')}>{error}</Alert> : null}
+                    {schemas[0].name === "" ?
+                        <Typography variant={'h6'} color={'secondary'} style={{textAlign: "center"}}>
+                            No schemas available!</Typography> : null
+                    }
+                    <TableContainer component={Paper} style={{marginTop: 30}}>
+                        <Table>
+                            <TableHead>
+                                <TableRow>
+                                    <TableCell>#</TableCell>
+                                    <TableCell align="right">Name</TableCell>
+                                    <TableCell align="right">Description</TableCell>
+                                    <TableCell align="right">Separator</TableCell>
+                                    <TableCell align="right">Created At</TableCell>
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                {schemas.map((schema, index) => (
+                                    //@ts-ignore
+                                    <TableRow
+                                        key={index + 1}
+                                        sx={{'&:last-child td, &:last-child th': {border: 0}}}
+                                    >
+                                        <TableCell component="th" scope="row">
+                                            {schemas[0].name !== "" ? index + 1 : null}
+                                        </TableCell>
+                                        <TableCell align="right">{schema.name}</TableCell>
+                                        <TableCell align="right">{schema.description}</TableCell>
+                                        <TableCell align="right">{schema.separator}</TableCell>
+                                        <TableCell
+                                            align="right">{schema.createdAt.replace(/([a-zA-Z ])/g, " ").split('.')[0]}</TableCell>
                                     </TableRow>
-                                </TableHead>
-                                {schemas[0].name !== "" ?
-                                    <TableBody>
-                                        {schemas.map((schema, index) => (
-                                            //@ts-ignore
-                                            <TableRow
-                                                key={index + 1}
-                                                sx={{'&:last-child td, &:last-child th': {border: 0}}}
-                                            >
-                                                <TableCell component="th" scope="row">
-                                                    {index + 1}
-                                                </TableCell>
-                                                <TableCell align="right">{schema.name}</TableCell>
-                                                <TableCell align="right">{schema.separator}</TableCell>
-                                                <TableCell align="right">{schema.createdAt.replace(/([a-zA-Z ])/g, " ").split('.')[0]}</TableCell>
-                                            </TableRow>
-                                        ))}
-                                    </TableBody> :
-                                    <Typography variant={'h3'} color={'secondary'} style={{textAlign: "center"}}>No
-                                        schemas
-                                        available!</Typography>
-                                }
-                            </Table>
-                        </TableContainer>
-                    </Container> :
-                    <Container>
-                        <Grid container spacing={3}>
-                            <Grid item xs={6}>
-                                <TextField label="Name" variant="outlined" size={'small'} fullWidth={true}
-                                           onChange={e => setName(e.target.value)}/>
-                            </Grid>
-                            <Grid item xs={6}>
-                                <TextField label="Separator" variant="outlined" size={'small'} fullWidth={true}
-                                           inputProps={{maxLength: 1}} onChange={e => setSeparator(e.target.value)}
-                                />
-                            </Grid>
+                                ))}
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
+                </Container> :
+                <Container>
+                    <Grid container spacing={3}>
+                        <Grid item xs={4}>
+                            <TextField label="Name" variant="outlined" size={'small'} fullWidth={true}
+                                       onChange={e => setName(e.target.value)}/>
                         </Grid>
-                        {success ? <Alert severity="success" onClose={() => setSuccess(false)}>Form submitted
-                            successfully!</Alert> : null}
-                        {error ? <Alert severity="error" onClose={() => setError('')}>{error}</Alert> : null}
-                        <Grid container spacing={2}>
-                            <Grid item xs={6}>
-                                <Typography variant={'h5'} color={'textPrimary'}>Schema Editor</Typography>
-                                <TextField
-                                    label="Schema Editor"
-                                    variant="filled"
-                                    multiline
-                                    rows={25}
-                                    fullWidth={true}
-                                    defaultValue={JSON.stringify(schemaData, null, 5)}
-                                    color={'primary'}
-                                    onChange={e => setSchemaObj(JSON.parse(e.target.value))}
-                                />
-                                <Grid container={true}>
-                                    <Grid item xs={2}>
-                                        <Button variant={'contained'} color={'primary'} size={'small'}
-                                                onClick={async () => {
-                                                    await onSubmit();
-                                                    // await navigator.clipboard.writeText(JSON.stringify(schemaData));
-                                                }}>Save</Button>
-                                    </Grid>
-                                    <Grid item xs={2}>
-                                        <Button variant={'contained'} color={'secondary'} size={'small'}
-                                                onClick={() => setToggle(!toggle)}>Cancel</Button>
-                                    </Grid>
+                        <Grid item xs={4}>
+                            <TextField label="Description" variant="outlined" size={'small'} fullWidth={true}
+                                       onChange={e => setDescription(e.target.value)}
+                            />
+                        </Grid>
+                        <Grid item xs={4}>
+                            <TextField label="Separator" variant="outlined" size={'small'} fullWidth={true}
+                                       inputProps={{maxLength: 1}} onChange={e => setSeparator(e.target.value)}
+                            />
+                        </Grid>
+                    </Grid>
+                    {success ? <Alert severity="success" onClose={() => setSuccess(false)}>Form submitted
+                        successfully!</Alert> : null}
+                    {error ? <Alert severity="error" onClose={() => setError('')}>{error}</Alert> : null}
+                    <Grid container spacing={2}>
+                        <Grid item xs={6}>
+                            <Typography variant={'h5'} color={'textPrimary'}>Schema Editor</Typography>
+                            <TextField
+                                label="Schema Editor"
+                                variant="filled"
+                                multiline
+                                rows={25}
+                                fullWidth={true}
+                                defaultValue={JSON.stringify(schemaData, null, 5)}
+                                color={'primary'}
+                                onChange={e => setSchemaObj(JSON.parse(e.target.value))}
+                            />
+                            <Grid container={true}>
+                                <Grid item xs={2}>
+                                    <Button variant={'contained'} color={'primary'} size={'small'}
+                                            onClick={async () => await onSubmit()}>Save</Button>
+                                </Grid>
+                                <Grid item xs={2}>
+                                    <Button variant={'contained'} color={'secondary'} size={'small'}
+                                            onClick={() => setToggle(!toggle)}>Cancel</Button>
                                 </Grid>
                             </Grid>
-                            <Grid item xs={6}>
-                                <Typography variant={'h5'} color={'textPrimary'}>Preview</Typography>
-                                <JsonForms
-                                    // @ts-ignore
-                                    schema={schemaData}
-                                    // @ts-ignore
-                                    uischema={uiSchemaData}
-                                    renderers={materialRenderers}
-                                    cells={materialCells}
-                                />
-                            </Grid>
                         </Grid>
-                    </Container>
+                        <Grid item xs={6}>
+                            <Typography variant={'h5'} color={'textPrimary'}>Preview</Typography>
+                            <JsonForms
+                                // @ts-ignore
+                                schema={schemaData}
+                                // @ts-ignore
+                                uischema={uiSchemaData}
+                                renderers={materialRenderers}
+                                cells={materialCells}
+                            />
+                        </Grid>
+                    </Grid>
+                </Container>
             }
         </>
     );
