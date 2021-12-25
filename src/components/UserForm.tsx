@@ -5,7 +5,6 @@ import Button from "@material-ui/core/Button";
 import {JsonForms} from "@jsonforms/react";
 import {materialCells, materialRenderers} from "@jsonforms/material-renderers";
 import {makeStyles} from "@material-ui/core/styles";
-import {TextField} from "@material-ui/core";
 import {Alert} from "@mui/material";
 import axios from "axios";
 
@@ -37,7 +36,7 @@ const UserForm: FC<IProps> = ({schema, setSchema, schemaName, description, separ
     const [displayDataAsString, setDisplayDataAsString] = useState('');
     const [jsonData, setJsonData] = useState({});
     const [uiSchema, setUiSchema] = useState({});
-    const [fullName, setFullName] = useState('');
+    const [toggle, setToggle] = useState(false);
     const [success, setSuccess] = useState(false);
     const [error, setError] = useState('');
     useEffect(() => {
@@ -115,8 +114,11 @@ const UserForm: FC<IProps> = ({schema, setSchema, schemaName, description, separ
             // @ts-ignore
             userData = userData + JSON.stringify(jsonData[key] || '') + separator;
         }
+        if (userData[userData.length - 1] === ".") {
+            userData = userData.slice(0, -1);
+        }
         await navigator.clipboard.writeText(userData);
-        const data = {fullName, schemaName, description, data: userData};
+        const data = {schemaName, description, data: userData};
         try {
             (await axios.post('http://localhost:5000/api/user/add', data));
             setError('');
@@ -129,40 +131,22 @@ const UserForm: FC<IProps> = ({schema, setSchema, schemaName, description, separ
 
     return (
         <Fragment>
-            <Grid container spacing={3}>
-                <Grid item xs={4}>
-                    <TextField label="Full Name" variant="outlined" size={'small'} fullWidth={true}
-                               onChange={e => setFullName(e.target.value)}/>
-                </Grid>
-            </Grid>
             {success ? <Alert severity="success" onClose={() => setSuccess(false)}>Form submitted
                 successfully!</Alert> : null}
             {error ? <Alert severity="error" onClose={() => setError('')}>{error}</Alert> : null}
             <Grid
                 container={true}
-                spacing={10}>
-                <Grid item sm={6}>
-                    <Typography variant={'h5'}>Data</Typography>
-                    <div className={classes.dataContent}>
-                        <pre>{displayDataAsString}</pre>
-                    </div>
-                    <div style={{display: 'flex', justifyContent: 'space-between'}}>
-                        <Button
-                            color='secondary'
-                            onClick={onSubmit}
-                            disabled={Object.keys(jsonData).length < 1}
-                            variant='contained'>Save</Button>
-                        <Button
-                            onClick={() => setJsonData({})}
-                            style={{backgroundColor: '#FFA500'}}
-                            disabled={Object.keys(jsonData).length < 1}
-                            variant='contained'>Clear</Button>
-                        <Button
-                            onClick={() => setSchema({properties: {}})}
-                            color='secondary'
-                            variant='contained'>Back</Button>
-                    </div>
-                </Grid>
+                direction={'row'}
+                justifyContent={'center'}
+                spacing={6}>
+                {toggle ?
+                    <Grid item sm={6}>
+                        <Typography variant={'h5'}>Data</Typography>
+                        <div className={classes.dataContent}>
+                            <pre>{displayDataAsString}</pre>
+                        </div>
+                    </Grid> : null
+                }
                 <Grid item sm={6}>
                     <Typography variant={'h5'}>Form</Typography>
                     <div className={classes.demoform}>
@@ -177,6 +161,33 @@ const UserForm: FC<IProps> = ({schema, setSchema, schemaName, description, separ
                                 onChange={({errors, data}) => setJsonData(data)}
                             /> : null
                         }
+                        <Grid container={true} style={{flexDirection: 'row', justifyContent: 'end'}}>
+                            <Grid item xs={2}>
+                                <Button
+                                    style={{backgroundColor: 'green', color: 'white'}}
+                                    onClick={onSubmit}
+                                    disabled={Object.keys(jsonData).length < 1}
+                                    variant='contained'>Save</Button>
+                            </Grid>
+                            <Grid item xs={2}>
+                                <Button
+                                    onClick={() => setJsonData({})}
+                                    style={{backgroundColor: '#FFA500', color: 'white'}}
+                                    disabled={Object.keys(jsonData).length < 1}
+                                    variant='contained'>Clear</Button>
+                            </Grid>
+                            <Grid item xs={2}>
+                                <Button
+                                    onClick={() => setToggle(!toggle)}
+                                    variant='contained'>{!toggle ? 'Show' : 'Hide'}</Button>
+                            </Grid>
+                            <Grid item xs={2}>
+                                <Button
+                                    onClick={() => setSchema({properties: {}})}
+                                    color='secondary'
+                                    variant='contained'>Back</Button>
+                            </Grid>
+                        </Grid>
                     </div>
                 </Grid>
             </Grid>

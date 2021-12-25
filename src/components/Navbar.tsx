@@ -28,17 +28,18 @@ const ResponsiveAppBar: FC<IProps> = ({setToggle, links, setSchema}: IProps) => 
     return (
         <AppBar position="static">
             <Container maxWidth="xl">
-                <Toolbar>
-                    <Box sx={{display: 'flex'}}>
-                        {links.map((link) => (
-                            <Button key={link} sx={{my: 2, color: 'white', display: 'block'}}
-                                    onClick={() => setStage(link)}
-                            >
-                                {link}
-                            </Button>
-                        ))}
-                    </Box>
-                </Toolbar>
+                <Box style={{display: 'flex', justifyContent: 'space-between'}}>
+                    {links.map((link) => (
+                        <Button key={link} sx={{
+                            my: 2, color: 'white', display: 'block', justifyContent: 'space-between',
+                            backgroundColor: `${link === 'Create Schema' ? '#FFA500' : ''}`,
+                            marginLeft: `${link === 'Create Schema' ? '-50px' : ''}`
+                        }} onClick={() => setStage(link)}
+                        >
+                            {link}
+                        </Button>
+                    ))}
+                </Box>
             </Container>
         </AppBar>
     );

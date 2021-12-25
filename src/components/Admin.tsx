@@ -198,16 +198,6 @@ const Admin = () => {
                                 color={'primary'}
                                 onChange={e => setSchemaObj(JSON.parse(e.target.value))}
                             />
-                            <Grid container={true}>
-                                <Grid item xs={2}>
-                                    <Button variant={'contained'} color={'primary'} size={'small'}
-                                            onClick={async () => await onSubmit()}>Save</Button>
-                                </Grid>
-                                <Grid item xs={2}>
-                                    <Button variant={'contained'} color={'secondary'} size={'small'}
-                                            onClick={() => setToggle(!toggle)}>Cancel</Button>
-                                </Grid>
-                            </Grid>
                         </Grid>
                         <Grid item xs={6}>
                             <Typography variant={'h5'} color={'textPrimary'}>Preview</Typography>
@@ -219,6 +209,16 @@ const Admin = () => {
                                 renderers={materialRenderers}
                                 cells={materialCells}
                             />
+                            <Grid container={true} style={{flexDirection: 'row', justifyContent: 'end'}}>
+                                <Grid item xs={2}>
+                                    <Button variant={'contained'} style={{backgroundColor: 'green', color: 'white'}}
+                                            size={'small'} onClick={async () => await onSubmit()}>Save</Button>
+                                </Grid>
+                                <Grid item xs={2}>
+                                    <Button variant={'contained'} style={{backgroundColor: 'red', color: 'white'}}
+                                            size={'small'} onClick={() => setToggle(!toggle)}>Cancel</Button>
+                                </Grid>
+                            </Grid>
                         </Grid>
                     </Grid>
                 </Container>
