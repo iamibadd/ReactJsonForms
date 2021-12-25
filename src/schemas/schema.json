@@ -54,5 +54,9 @@
       "description": "This is date-time input",
       "format": "date-time"
     }
-  }
+  },
+  "required": [
+    "numericFields",
+    "stringField"
+  ]
 }

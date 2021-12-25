@@ -1,5 +1,5 @@
 import React, {FC} from 'react';
-import {Button, AppBar, Box, Toolbar, Container} from '@mui/material';
+import {Button, AppBar, Box, Container} from '@mui/material';
 
 
 interface IProps {
@@ -26,14 +26,12 @@ const ResponsiveAppBar: FC<IProps> = ({setToggle, links, setSchema}: IProps) => 
         }
     }
     return (
-        <AppBar position="static">
+        <AppBar position="static" sx={{background: '#FFA500'}}>
             <Container maxWidth="xl">
-                <Box style={{display: 'flex', justifyContent: 'space-between'}}>
+                <Box style={{display: 'flex', justifyContent: 'space-between', color: '#FFA500'}}>
                     {links.map((link) => (
                         <Button key={link} sx={{
-                            my: 2, color: 'white', display: 'block', justifyContent: 'space-between',
-                            backgroundColor: `${link === 'Create Schema' ? '#FFA500' : ''}`,
-                            marginLeft: `${link === 'Create Schema' ? '-50px' : ''}`
+                            my: 2, color: 'white'
                         }} onClick={() => setStage(link)}
                         >
                             {link}

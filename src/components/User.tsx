@@ -5,7 +5,7 @@ import Navbar from "./Navbar";
 import UserForm from "./UserForm";
 import axios from "axios";
 import {Typography} from "@material-ui/core";
-
+const backendApi = process.env.REACT_APP_BACKEND_API;
 
 const User = () => {
     const [schemas, setSchemas] = useState([]);
@@ -17,7 +17,8 @@ const User = () => {
     useEffect(() => {
         (async () => {
             try {
-                const data = (await axios.get('http://localhost:5000/api/admin/all')).data;
+                const url = `${backendApi}/api/admin/all`;
+                const data = (await axios.get(url)).data;
                 if (data.length) {
                     setSchemas(data);
                 }
@@ -34,7 +35,7 @@ const User = () => {
                 {error ? <Alert severity="error" onClose={() => setError('')}>{error}</Alert> : null}
                 {schemas.length < 1 ?
                     <Typography variant={'h6'} color={'secondary'} style={{textAlign: "center"}}>
-                        No schemas added by admin!</Typography> : null
+                        No schemas added by the admin!</Typography> : null
                 }
                 {Object.keys(schema.properties).length < 1 ?
                     <SchemasList schemas={schemas} setSchema={setSchema} setSchemaName={setSchemaName}

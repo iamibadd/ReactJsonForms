@@ -16,7 +16,7 @@ const SchemasList: FC<IProps> = ({schemas, setSchema, setSchemaName, setDescript
                 schemas.map((schema, index) =>
                     <Grid item xs={6} key={index}>
                         <Card sx={{
-                            backgroundColor: '#FFA500', height: 200, textAlign: 'center', display: "flex",
+                            backgroundColor: '#858D8D', height: 200, textAlign: 'center', display: "flex",
                             flexDirection: "column",
                             justifyContent: "center"
                         }}>
@@ -28,7 +28,7 @@ const SchemasList: FC<IProps> = ({schemas, setSchema, setSchemaName, setDescript
                                 <Typography sx={{fontSize: 14}} color="text.secondary">
                                     {schema.description}
                                 </Typography>
-                                <Button variant={'contained'} size={'small'} sx={{marginTop: 2}}
+                                <Button size={'small'} sx={{marginTop: 2, background: 'black', color: 'white'}}
                                         onClick={() => {
                                             setSchema(schema.schema);
                                             setSchemaName(schema.name);

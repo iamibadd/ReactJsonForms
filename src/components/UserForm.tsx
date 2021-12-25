@@ -7,6 +7,7 @@ import {materialCells, materialRenderers} from "@jsonforms/material-renderers";
 import {makeStyles} from "@material-ui/core/styles";
 import {Alert} from "@mui/material";
 import axios from "axios";
+const backendApi = process.env.REACT_APP_BACKEND_API;
 
 const useStyles = makeStyles((_theme) => ({
     dataContent: {
@@ -120,7 +121,8 @@ const UserForm: FC<IProps> = ({schema, setSchema, schemaName, description, separ
         await navigator.clipboard.writeText(userData);
         const data = {schemaName, description, data: userData};
         try {
-            (await axios.post('http://localhost:5000/api/user/add', data));
+            const url = `${backendApi}/api/user/add`;
+            (await axios.post(url, data));
             setError('');
             setSuccess(true);
         } catch (e: any) {

@@ -19,7 +19,7 @@ import schema from '../schemas/schema.json';
 import axios from "axios";
 import {Alert} from "@mui/material";
 import Navbar from "./Navbar";
-
+const backendApi = process.env.REACT_APP_BACKEND_API;
 
 const Admin = () => {
     const [name, setName] = useState('');
@@ -35,7 +35,8 @@ const Admin = () => {
     useEffect(() => {
         (async () => {
             try {
-                const data = (await axios.get('http://localhost:5000/api/admin/all')).data;
+                const url = `${backendApi}/api/admin/all`;
+                const data = (await axios.get(url)).data;
                 if (data.length) {
                     setSchemas(data);
                 }
@@ -115,7 +116,8 @@ const Admin = () => {
     const onSubmit = async () => {
         const data = {name, separator, description, schema: schemaData};
         try {
-            (await axios.post('http://localhost:5000/api/admin/add', data));
+            const url = `${backendApi}/api/admin/add`;
+            (await axios.post(url, data));
             setError('');
             setSuccess(true);
         } catch (e: any) {
@@ -125,7 +127,7 @@ const Admin = () => {
     }
     return (
         <>
-            <Navbar links={['Dashboard', 'Create Schema']} setToggle={setToggle}/>
+            <Navbar links={['Dashboard']} setToggle={setToggle}/>
             {!toggle ?
                 <Container maxWidth={'md'}>
                     {error ? <Alert severity="error" onClose={() => setError('')}>{error}</Alert> : null}
@@ -133,7 +135,11 @@ const Admin = () => {
                         <Typography variant={'h6'} color={'secondary'} style={{textAlign: "center"}}>
                             No schemas available!</Typography> : null
                     }
-                    <TableContainer component={Paper} style={{marginTop: 30}}>
+                    <Button style={{
+                        color: 'white', float: 'right', backgroundColor: `#FFA500`, marginTop: 5, marginBottom: 10, display: 'block'
+                    }} onClick={() => setToggle(!toggle)}
+                    >Create Schema</Button>
+                    <TableContainer component={Paper}>
                         <Table>
                             <TableHead>
                                 <TableRow>
