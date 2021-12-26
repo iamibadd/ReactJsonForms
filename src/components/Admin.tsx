@@ -208,13 +208,12 @@ const Admin = () => {
                         <Grid item xs={6}>
                             <Typography variant={'h5'} color={'textPrimary'}>Preview</Typography>
                             <JsonForms
-                                // @ts-ignore
                                 schema={schemaData}
                                 // @ts-ignore
                                 uischema={uiSchemaData}
                                 renderers={materialRenderers}
                                 cells={materialCells}
-                            />
+                                data={schemaData}/>
                             <Grid container={true} style={{flexDirection: 'row', justifyContent: 'end'}}>
                                 <Grid item xs={2}>
                                     <Button variant={'contained'} style={{backgroundColor: 'green', color: 'white'}}

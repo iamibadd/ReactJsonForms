@@ -115,7 +115,7 @@ const UserForm: FC<IProps> = ({schema, setSchema, schemaName, description, separ
             // @ts-ignore
             userData = userData + JSON.stringify(jsonData[key] || '') + separator;
         }
-        if (userData[userData.length - 1] === ".") {
+        if (userData[userData.length - 1] === separator) {
             userData = userData.slice(0, -1);
         }
         await navigator.clipboard.writeText(userData);
