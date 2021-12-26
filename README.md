@@ -7,7 +7,7 @@
 ```
 REACT_APP_BACKEND_API = BACKEND_API_URL
 ```
-For example, if your ``BACKEND_API_URL`` is **http://localhost:5000** you will type the following in .env file:
+For example, if your ``BACKEND_API_URL`` is **http://localhost:5000**, you will type the following in .env file:
 
 ```
 REACT_APP_BACKEND_API = http://localhost:5000
