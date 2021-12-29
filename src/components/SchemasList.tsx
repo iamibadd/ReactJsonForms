@@ -4,12 +4,11 @@ import {Card, CardContent, Typography, Grid, Button} from "@mui/material";
 interface IProps {
     schemas: Array<any>;
     setSchema: (obj: any) => void;
-    setSchemaName: (str: any) => void;
-    setDescription: (str: any) => void;
     setSeparator: (str: any) => void;
+    setSchemaId: (id: number) => void;
 }
 
-const SchemasList: FC<IProps> = ({schemas, setSchema, setSchemaName, setDescription, setSeparator}: IProps) => {
+const SchemasList: FC<IProps> = ({schemas, setSchema, setSeparator, setSchemaId}: IProps) => {
     return (
         <Grid container spacing={12}>
             {schemas && schemas.length && schemas[0].name !== "" ?
@@ -31,8 +30,7 @@ const SchemasList: FC<IProps> = ({schemas, setSchema, setSchemaName, setDescript
                                 <Button size={'small'} sx={{marginTop: 2, background: 'black', color: 'white'}}
                                         onClick={() => {
                                             setSchema(schema.schema);
-                                            setSchemaName(schema.name);
-                                            setDescription(schema.description);
+                                            setSchemaId(schema.id);
                                             setSeparator(schema.separator);
                                         }}>Use Schema</Button>
                             </CardContent>

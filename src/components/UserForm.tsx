@@ -7,6 +7,7 @@ import {materialCells, materialRenderers} from "@jsonforms/material-renderers";
 import {makeStyles} from "@material-ui/core/styles";
 import {Alert} from "@mui/material";
 import axios from "axios";
+
 const backendApi = process.env.REACT_APP_BACKEND_API;
 
 const useStyles = makeStyles((_theme) => ({
@@ -25,20 +26,19 @@ const useStyles = makeStyles((_theme) => ({
 
 
 interface IProps {
-    schemaName: String;
-    description: String;
+    schemaId: Number;
     separator: String;
     schema: { properties: {} };
     setSchema: (obj: any) => void;
+    setSuccess: (action: boolean) => void;
 }
 
-const UserForm: FC<IProps> = ({schema, setSchema, schemaName, description, separator}: IProps) => {
+const UserForm: FC<IProps> = ({schema, setSchema, separator, schemaId, setSuccess}: IProps) => {
     const classes = useStyles();
     const [displayDataAsString, setDisplayDataAsString] = useState('');
     const [jsonData, setJsonData] = useState({});
     const [uiSchema, setUiSchema] = useState({});
     const [toggle, setToggle] = useState(false);
-    const [success, setSuccess] = useState(false);
     const [error, setError] = useState('');
     useEffect(() => {
         setDisplayDataAsString(JSON.stringify(jsonData, null, 2));
@@ -118,11 +118,13 @@ const UserForm: FC<IProps> = ({schema, setSchema, schemaName, description, separ
         if (userData[userData.length - 1] === separator) {
             userData = userData.slice(0, -1);
         }
+        userData = userData.replace(/"/g, '');
         await navigator.clipboard.writeText(userData);
-        const data = {schemaName, description, data: userData};
+        const data = {data: userData, jsonData, schemaId};
         try {
             const url = `${backendApi}/api/user/add`;
             (await axios.post(url, data));
+            setSchema({properties: {}});
             setError('');
             setSuccess(true);
         } catch (e: any) {
@@ -133,8 +135,6 @@ const UserForm: FC<IProps> = ({schema, setSchema, schemaName, description, separ
 
     return (
         <Fragment>
-            {success ? <Alert severity="success" onClose={() => setSuccess(false)}>Form submitted
-                successfully!</Alert> : null}
             {error ? <Alert severity="error" onClose={() => setError('')}>{error}</Alert> : null}
             <Grid
                 container={true}
@@ -142,14 +142,14 @@ const UserForm: FC<IProps> = ({schema, setSchema, schemaName, description, separ
                 justifyContent={'center'}
                 spacing={6}>
                 {toggle ?
-                    <Grid item sm={6}>
+                    <Grid item md={8} sm={8} lg={6}>
                         <Typography variant={'h5'}>Data</Typography>
                         <div className={classes.dataContent}>
                             <pre>{displayDataAsString}</pre>
                         </div>
                     </Grid> : null
                 }
-                <Grid item sm={6}>
+                <Grid item md={8} sm={8} lg={6}>
                     <Typography variant={'h5'}>Form</Typography>
                     <div className={classes.demoform}>
                         {uiSchema ?
@@ -164,26 +164,26 @@ const UserForm: FC<IProps> = ({schema, setSchema, schemaName, description, separ
                             /> : null
                         }
                         <Grid container={true} style={{flexDirection: 'row', justifyContent: 'end'}}>
-                            <Grid item xs={2}>
+                            <Grid item style={{margin: '0 5px'}}>
                                 <Button
                                     style={{backgroundColor: 'green', color: 'white'}}
                                     onClick={onSubmit}
                                     disabled={Object.keys(jsonData).length < 1}
                                     variant='contained'>Save</Button>
                             </Grid>
-                            <Grid item xs={2}>
+                            <Grid item style={{margin: '0 5px'}}>
                                 <Button
                                     onClick={() => setJsonData({})}
                                     style={{backgroundColor: '#FFA500', color: 'white'}}
                                     disabled={Object.keys(jsonData).length < 1}
                                     variant='contained'>Clear</Button>
                             </Grid>
-                            <Grid item xs={2}>
+                            <Grid item style={{margin: '0 5px'}}>
                                 <Button
                                     onClick={() => setToggle(!toggle)}
                                     variant='contained'>{!toggle ? 'Show' : 'Hide'}</Button>
                             </Grid>
-                            <Grid item xs={2}>
+                            <Grid item style={{margin: '0 5px'}}>
                                 <Button
                                     onClick={() => setSchema({properties: {}})}
                                     color='secondary'
