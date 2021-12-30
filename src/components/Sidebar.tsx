@@ -43,8 +43,8 @@ const DrawerHeader = styled('div')(({theme}) => ({
 
 interface IProps {
     links: Array<any>
-    setToggle?: (b: boolean) => void;
-    returnToDashboard?: () => void;
+    setToggle?: (stage: string) => void;
+    returnToDashboard?: (stage: string) => void;
 }
 
 
@@ -102,7 +102,7 @@ const SideBar: FC<IProps> = ({setToggle, links, returnToDashboard}: IProps) => {
 
     return (
         <Box sx={{display: 'flex'}}>
-            <AppBar position="static" sx={{background: '#FFA500'}} open={open}>
+            <AppBar position="static" sx={{background: '#FFA500', overflow: 'no-overflow'}} open={open}>
                 <Toolbar>
                     <IconButton
                         color="inherit"
@@ -116,13 +116,13 @@ const SideBar: FC<IProps> = ({setToggle, links, returnToDashboard}: IProps) => {
                     ><MenuIcon/></IconButton>
                     <Button sx={{my: 2, color: 'white'}} onClick={() => {
                         if (setToggle) {
-                            setToggle(false);
+                            setToggle('Dashboard');
                         }
                     }}>Dashboard</Button>
                 </Toolbar>
             </AppBar>
             <Drawer variant="permanent" open={open} sx={{background: '#FFA500'}}>
-                <DrawerHeader sx={{background: '#FFA500',  height: 68.5}}>
+                <DrawerHeader sx={{background: '#FFA500', height: 68.5}}>
                     <IconButton onClick={handleDrawerClose}>
                         {theme.direction === 'rtl' ? <ChevronRightIcon/> : <ChevronLeftIcon/>}
                     </IconButton>
@@ -133,7 +133,9 @@ const SideBar: FC<IProps> = ({setToggle, links, returnToDashboard}: IProps) => {
                         <div key={index}>
                             <ListItem button key={link} onClick={() => {
                                 if (link.includes('SCHEMA') && returnToDashboard) {
-                                    returnToDashboard();
+                                    returnToDashboard('Schemas');
+                                } else if (link.includes('DATA') && setToggle) {
+                                    setToggle('Users');
                                 }
                             }}>
                                 <ListItemIcon>{link.includes('SCHEMAS') ? <AddIcon/> : <DataObjectIcon/>}</ListItemIcon>

@@ -1,18 +1,7 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useState, useCallback} from "react";
 import {
-    Container,
-    Table,
-    TableBody,
-    TableCell,
-    TableContainer,
-    TableHead,
-    TableRow,
-    Paper,
-    Typography,
-    Button,
-    TextField,
-    Grid,
-    Switch
+    Container, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography, Button,
+    TextField, Grid, Switch
 } from "@material-ui/core";
 import {JsonForms} from '@jsonforms/react';
 import {materialCells, materialRenderers,} from '@jsonforms/material-renderers';
@@ -21,6 +10,7 @@ import axios from "axios";
 import {Alert, ButtonGroup} from "@mui/material";
 import SideBar from "./Sidebar";
 import DialogueBox from "./DialogueBox";
+import DataTable from "./DataTable";
 
 const backendApi = process.env.REACT_APP_BACKEND_API;
 
@@ -34,27 +24,29 @@ const Admin = () => {
     const [schemaData, setSchemaData] = useState(schema);
     const [uiSchemaData, setUiSchemaData] = useState({});
     const [schemaObj, setSchemaObj] = useState({});
-    const [toggle, setToggle] = useState(false);
+    const [toggle, setToggle] = useState('Dashboard');
     const [edit, setEdit] = useState(false);
     const [confirm, setConfirm] = useState(false);
     const [schemaId, setSchemaId] = useState(0);
     const [schemaName, setSchemaName] = useState('');
+    const setSchemaAndUi = useCallback((schema: any) => {
+        setSchemaData(schema);
+        const elements = makeUiSchema(schema.properties);
+        const uiSchema = {type: "VerticalLayout", elements};
+        setUiSchemaData(uiSchema);
+    }, []);
     useEffect(() => {
         (async () => {
             try {
                 const url = `${backendApi}/api/admin/all`;
                 const data = (await axios.get(url)).data;
-                if (data.length) {
-                    setSchemas(data);
-                } else {
-                    setSchemas([]);
-                }
+                setSchemas(data);
             } catch (e: any) {
                 setError(e.response.data);
             }
         })();
         setSchemaAndUi(Object.keys(schemaObj).length ? schemaObj : schema);
-    }, [schemaObj, success]);
+    }, [schemaObj, success, setSchemaAndUi]);
     const makeUiSchema = (properties: any) => {
         let elements = [];
         let innerElements = {type: "", elements: []};
@@ -115,12 +107,6 @@ const Admin = () => {
         }
         return elements;
     }
-    const setSchemaAndUi = (schema: any) => {
-        setSchemaData(schema);
-        const elements = makeUiSchema(schema.properties);
-        const uiSchema = {type: "VerticalLayout", elements};
-        setUiSchemaData(uiSchema);
-    }
     const onSubmit = async () => {
         try {
             if (!edit) {
@@ -134,7 +120,7 @@ const Admin = () => {
             }
             setError('');
             setSuccess(!edit ? 'Form submitted successfully!' : 'Form updated successfully!');
-            setToggle(!toggle);
+            setToggle('Schemas');
         } catch (e: any) {
             setSuccess('');
             setError(e.response.data.message);
@@ -159,7 +145,7 @@ const Admin = () => {
         setDescription(schema.description);
         setSeparator(schema.separator);
         setEdit(true);
-        setToggle(!toggle);
+        setToggle('Create');
     }
     const deleteSchema = async (id: Number) => {
         try {
@@ -172,18 +158,18 @@ const Admin = () => {
             setError(e.response.data.message);
         }
     }
-    const returnToDashboard = () => {
+    const returnToDashboard = (stage: string) => {
         setSchemaAndUi(schema);
         setName('');
         setDescription('');
         setSeparator('');
         setEdit(false);
-        setToggle(true);
+        setToggle(stage);
     }
     return (
         <>
             <SideBar setToggle={setToggle} links={['SCHEMAS', 'DATA']} returnToDashboard={returnToDashboard}/>
-            {!toggle ?
+            {toggle === 'Schemas' ?
                 <Container maxWidth={'md'}>
                     <br/>
                     <Grid container={true} justifyContent={'center'}>
@@ -197,17 +183,23 @@ const Admin = () => {
                             }
                             {confirm ? <DialogueBox setConfirm={setConfirm} schemaName={schemaName}
                                                     schemaId={schemaId} deleteSchema={deleteSchema}/> : null}
+                            <Button size={'small'} variant={'contained'}
+                                    style={{background: '#FFA500', color: '#FFFFFF', float: 'right', marginBottom: 10}}
+                                    onClick={() => returnToDashboard('Create')}
+                            >Create Schema</Button>
                             <TableContainer component={Paper} style={{marginTop: 10}}>
                                 <Table>
                                     <TableHead>
                                         <TableRow>
-                                            <TableCell>#</TableCell>
-                                            <TableCell align="center">Name</TableCell>
-                                            <TableCell align="center">Description</TableCell>
-                                            <TableCell align="center">Separator</TableCell>
-                                            <TableCell align="center">Created At</TableCell>
-                                            <TableCell align="center">Active</TableCell>
-                                            <TableCell align="center">Actions</TableCell>
+                                            <TableCell style={{fontWeight: 'bold'}}>#</TableCell>
+                                            <TableCell align="center" style={{fontWeight: 'bold'}}>Name</TableCell>
+                                            <TableCell align="center"
+                                                       style={{fontWeight: 'bold'}}>Description</TableCell>
+                                            <TableCell align="center" style={{fontWeight: 'bold'}}>Separator</TableCell>
+                                            <TableCell align="center" style={{fontWeight: 'bold'}}>Active</TableCell>
+                                            <TableCell align="center" style={{fontWeight: 'bold'}}>Created
+                                                At</TableCell>
+                                            <TableCell align="center" style={{fontWeight: 'bold'}}>Actions</TableCell>
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
@@ -223,12 +215,12 @@ const Admin = () => {
                                                 <TableCell align="center">{schema.name}</TableCell>
                                                 <TableCell align="center">{schema.description}</TableCell>
                                                 <TableCell align="center">{schema.separator}</TableCell>
-                                                <TableCell
-                                                    align="center">{schema.createdAt.replace(/([a-zA-Z ])/g, " ").split('.')[0]}</TableCell>
                                                 <TableCell align="center"><Switch
                                                     checked={schema.isActive} size={'small'} color={'primary'}
                                                     onChange={() => onChange(schema.id, schema.isActive)}
                                                 /></TableCell>
+                                                <TableCell
+                                                    align="center">{schema.createdAt.replace(/([a-zA-Z ])/g, " ").split('.')[0]}</TableCell>
                                                 <TableCell align="center">
                                                     <ButtonGroup>
                                                         <Button size={'small'}
@@ -248,18 +240,18 @@ const Admin = () => {
                             </TableContainer>
                         </Grid>
                     </Grid>
-                </Container> :
-                <Container maxWidth={'md'}>
+                </Container> : toggle === 'Create' ? <Container maxWidth={'md'}>
                     {edit ? <Typography variant={'h4'} color={'primary'} style={{textAlign: 'center'}}>Edit
                         Schema</Typography> : null}
                     <br/>
+                    {error ? <Alert severity="error" onClose={() => setError('')}>{error}</Alert> : null}
                     <Grid container spacing={3} justifyContent={'center'}>
                         <Grid item lg={4} sm={3} xs={8}>
                             <TextField label="Name" variant="outlined" size={'small'} fullWidth={true} value={name}
                                        onChange={e => setName(e.target.value)}/>
                         </Grid>
                         <Grid item lg={4} sm={3} xs={8}>
-                            <TextField label="Description" variant="outlined" size={'small'} fullWidth={true}
+                            <TextField label="Description" multiline variant="outlined" size={'small'} fullWidth={true}
                                        value={description} onChange={e => setDescription(e.target.value)}
                             />
                         </Grid>
@@ -270,7 +262,6 @@ const Admin = () => {
                             />
                         </Grid>
                     </Grid>
-                    {error ? <Alert severity="error" onClose={() => setError('')}>{error}</Alert> : null}
                     <Grid container justifyContent={'center'} spacing={6}>
                         <Grid item xl={6} lg={6} md={8} sm={8} xs={8}>
                             <Typography variant={'h5'} color={'textPrimary'}>Schema Editor</Typography>
@@ -304,12 +295,13 @@ const Admin = () => {
                                 <Grid item lg={2} sm={2} xs={4}>
                                     <Button variant={'contained'}
                                             style={{backgroundColor: 'red', color: 'white'}}
-                                            size={'small'} onClick={() => setToggle(!toggle)}>Cancel</Button>
+                                            size={'small'} onClick={() => setToggle('Schemas')}>Cancel</Button>
                                 </Grid>
                             </Grid>
                         </Grid>
                     </Grid>
-                </Container>
+                </Container> : toggle === 'Users' ? <DataTable/>
+                    : null
             }
         </>
     );
