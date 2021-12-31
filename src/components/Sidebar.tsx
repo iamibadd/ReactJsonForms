@@ -8,6 +8,7 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import AddIcon from '@mui/icons-material/Add';
 import DataObjectIcon from '@mui/icons-material/DataObject';
 import {Button, Box, List, Divider, IconButton, Toolbar, ListItem, ListItemIcon, ListItemText} from '@mui/material';
+import {useTranslation} from 'react-i18next';
 
 const drawerWidth = 240;
 
@@ -89,6 +90,7 @@ const Drawer = styled(MuiDrawer, {shouldForwardProp: (prop) => prop !== 'open'})
 );
 
 const SideBar: FC<IProps> = ({setToggle, links, returnToDashboard}: IProps) => {
+    const {t} = useTranslation();
     const theme = useTheme();
     const [open, setOpen] = React.useState(false);
 
@@ -102,23 +104,27 @@ const SideBar: FC<IProps> = ({setToggle, links, returnToDashboard}: IProps) => {
 
     return (
         <Box sx={{display: 'flex'}}>
-            <AppBar position="static" sx={{background: '#FFA500', overflow: 'no-overflow'}} open={open}>
-                <Toolbar>
-                    <IconButton
-                        color="inherit"
-                        aria-label="open drawer"
-                        onClick={handleDrawerOpen}
-                        edge="start"
-                        sx={{
-                            marginRight: '36px',
-                            ...(open && {display: 'none'}),
-                        }}
-                    ><MenuIcon/></IconButton>
-                    <Button sx={{my: 2, color: 'white'}} onClick={() => {
-                        if (setToggle) {
-                            setToggle('Dashboard');
-                        }
-                    }}>Dashboard</Button>
+            <AppBar position="static" sx={{background: '#FFA500'}}
+                    open={open}>
+                <Toolbar sx={{display: 'flex', justifyContent: 'space-between'}}>
+                    <div>
+                        <IconButton
+                            color="inherit"
+                            aria-label="open drawer"
+                            onClick={handleDrawerOpen}
+                            edge="start"
+                            sx={{
+                                marginRight: '36px',
+                                ...(open && {display: 'none'}),
+                            }}
+                        ><MenuIcon/></IconButton>
+                        <Button sx={{my: 2, color: 'white'}} onClick={() => {
+                            if (setToggle) {
+                                setToggle('Dashboard');
+                            }
+                        }}>{t('dashboard')}</Button>
+                    </div>
+                    {/**/}
                 </Toolbar>
             </AppBar>
             <Drawer variant="permanent" open={open} sx={{background: '#FFA500'}}>
@@ -132,14 +138,14 @@ const SideBar: FC<IProps> = ({setToggle, links, returnToDashboard}: IProps) => {
                     {links.map((link, index) => (
                         <div key={index}>
                             <ListItem button key={link} onClick={() => {
-                                if (link.includes('SCHEMA') && returnToDashboard) {
+                                if (link.includes('schemas') && returnToDashboard) {
                                     returnToDashboard('Schemas');
-                                } else if (link.includes('DATA') && setToggle) {
+                                } else if (link.includes('data') && setToggle) {
                                     setToggle('Users');
                                 }
                             }}>
-                                <ListItemIcon>{link.includes('SCHEMAS') ? <AddIcon/> : <DataObjectIcon/>}</ListItemIcon>
-                                <ListItemText primary={link}/>
+                                <ListItemIcon>{link.includes('schema') ? <AddIcon/> : <DataObjectIcon/>}</ListItemIcon>
+                                <ListItemText primary={t(link).toUpperCase()}/>
                             </ListItem>
                             <Divider/>
                         </div>

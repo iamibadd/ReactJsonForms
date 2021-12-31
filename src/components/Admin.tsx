@@ -11,10 +11,12 @@ import {Alert, ButtonGroup} from "@mui/material";
 import SideBar from "./Sidebar";
 import DialogueBox from "./DialogueBox";
 import DataTable from "./DataTable";
+import {useTranslation} from 'react-i18next';
 
 const backendApi = process.env.REACT_APP_BACKEND_API;
 
 const Admin = () => {
+    const {t} = useTranslation();
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
     const [separator, setSeparator] = useState('');
@@ -119,7 +121,7 @@ const Admin = () => {
                 (await axios.put(url, data));
             }
             setError('');
-            setSuccess(!edit ? 'Form submitted successfully!' : 'Form updated successfully!');
+            setSuccess(!edit ? 'form_submitted' : 'form_updated');
             setToggle('Schemas');
         } catch (e: any) {
             setSuccess('');
@@ -168,14 +170,14 @@ const Admin = () => {
     }
     return (
         <>
-            <SideBar setToggle={setToggle} links={['SCHEMAS', 'DATA']} returnToDashboard={returnToDashboard}/>
+            <SideBar setToggle={setToggle} links={['schemas', 'data']} returnToDashboard={returnToDashboard}/>
             {toggle === 'Schemas' ?
                 <Container maxWidth={'md'}>
                     <br/>
                     <Grid container={true} justifyContent={'center'}>
                         <Grid item={true} lg={12} sm={10} xs={8}>
                             {success ? <Alert severity="success" style={{marginTop: 5, marginBottom: 10}}
-                                              onClose={() => setSuccess('')}>{success}</Alert> : null}
+                                              onClose={() => setSuccess('')}>{t(success)}</Alert> : null}
                             {error ? <Alert severity="error" onClose={() => setError('')}>{error}</Alert> : null}
                             {!schemas.length ?
                                 <Typography variant={'h6'} color={'secondary'} style={{textAlign: "center"}}>
@@ -186,20 +188,24 @@ const Admin = () => {
                             <Button size={'small'} variant={'contained'}
                                     style={{background: '#FFA500', color: '#FFFFFF', float: 'right', marginBottom: 10}}
                                     onClick={() => returnToDashboard('Create')}
-                            >Create Schema</Button>
+                            >{t('create_schema')}</Button>
                             <TableContainer component={Paper} style={{marginTop: 10}}>
                                 <Table>
                                     <TableHead>
                                         <TableRow>
                                             <TableCell style={{fontWeight: 'bold'}}>#</TableCell>
-                                            <TableCell align="center" style={{fontWeight: 'bold'}}>Name</TableCell>
                                             <TableCell align="center"
-                                                       style={{fontWeight: 'bold'}}>Description</TableCell>
-                                            <TableCell align="center" style={{fontWeight: 'bold'}}>Separator</TableCell>
-                                            <TableCell align="center" style={{fontWeight: 'bold'}}>Active</TableCell>
-                                            <TableCell align="center" style={{fontWeight: 'bold'}}>Created
-                                                At</TableCell>
-                                            <TableCell align="center" style={{fontWeight: 'bold'}}>Actions</TableCell>
+                                                       style={{fontWeight: 'bold'}}>{t('name')}</TableCell>
+                                            <TableCell align="center"
+                                                       style={{fontWeight: 'bold'}}>{t('description')}</TableCell>
+                                            <TableCell align="center"
+                                                       style={{fontWeight: 'bold'}}>{t('separator')}</TableCell>
+                                            <TableCell align="center"
+                                                       style={{fontWeight: 'bold'}}>{t('active')}</TableCell>
+                                            <TableCell align="center"
+                                                       style={{fontWeight: 'bold'}}>{t('createdAt')}</TableCell>
+                                            <TableCell align="center"
+                                                       style={{fontWeight: 'bold'}}>{t('actions')}</TableCell>
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
@@ -224,13 +230,13 @@ const Admin = () => {
                                                 <TableCell align="center">
                                                     <ButtonGroup>
                                                         <Button size={'small'}
-                                                                onClick={() => onEdit(schema)}>Edit</Button>
+                                                                onClick={() => onEdit(schema)}>{t('edit')}</Button>
                                                         <Button size={'small'} color={'secondary'}
                                                                 onClick={() => {
                                                                     setSchemaId(schema.id);
                                                                     setSchemaName(schema.name);
                                                                     setConfirm(true);
-                                                                }}>Delete</Button>
+                                                                }}>{t('delete')}</Button>
                                                     </ButtonGroup>
                                                 </TableCell>
                                             </TableRow>
@@ -241,22 +247,23 @@ const Admin = () => {
                         </Grid>
                     </Grid>
                 </Container> : toggle === 'Create' ? <Container maxWidth={'md'}>
-                    {edit ? <Typography variant={'h4'} color={'primary'} style={{textAlign: 'center'}}>Edit
-                        Schema</Typography> : null}
+                    {edit ? <Typography variant={'h4'} color={'primary'}
+                                        style={{textAlign: 'center'}}>{t('edit_schema')}</Typography> : null}
                     <br/>
                     {error ? <Alert severity="error" onClose={() => setError('')}>{error}</Alert> : null}
                     <Grid container spacing={3} justifyContent={'center'}>
                         <Grid item lg={4} sm={3} xs={8}>
-                            <TextField label="Name" variant="outlined" size={'small'} fullWidth={true} value={name}
+                            <TextField label={t('name')} variant="outlined" size={'small'} fullWidth={true} value={name}
                                        onChange={e => setName(e.target.value)}/>
                         </Grid>
                         <Grid item lg={4} sm={3} xs={8}>
-                            <TextField label="Description" multiline variant="outlined" size={'small'} fullWidth={true}
+                            <TextField label={t('description')} multiline variant="outlined" size={'small'}
+                                       fullWidth={true}
                                        value={description} onChange={e => setDescription(e.target.value)}
                             />
                         </Grid>
                         <Grid item lg={4} sm={3} xs={8}>
-                            <TextField label="Separator" variant="outlined" size={'small'}
+                            <TextField label={t('separator')} variant="outlined" size={'small'}
                                        fullWidth={true} value={separator} inputProps={{maxLength: 1}}
                                        onChange={e => setSeparator(e.target.value)}
                             />
@@ -264,9 +271,9 @@ const Admin = () => {
                     </Grid>
                     <Grid container justifyContent={'center'} spacing={6}>
                         <Grid item xl={6} lg={6} md={8} sm={8} xs={8}>
-                            <Typography variant={'h5'} color={'textPrimary'}>Schema Editor</Typography>
+                            <Typography variant={'h5'} color={'textPrimary'}>{t('schema_editor')}</Typography>
                             <TextField
-                                label="Schema Editor"
+                                label={t('schema_editor')}
                                 variant="filled"
                                 multiline={true}
                                 rows={25}
@@ -278,7 +285,7 @@ const Admin = () => {
                             />
                         </Grid>
                         <Grid item xl={6} lg={6} md={8} sm={8} xs={8}>
-                            <Typography variant={'h5'} color={'textPrimary'}>Preview</Typography>
+                            <Typography variant={'h5'} color={'textPrimary'}>{t('preview')}</Typography>
                             <JsonForms
                                 schema={schemaData}
                                 // @ts-ignore
@@ -290,12 +297,12 @@ const Admin = () => {
                                 <Grid item lg={2} sm={2} xs={4}>
                                     <Button variant={'contained'}
                                             style={{backgroundColor: 'green', color: 'white', marginLeft: -5}}
-                                            size={'small'} onClick={onSubmit}>{edit ? 'Update' : 'Save'}</Button>
+                                            size={'small'} onClick={onSubmit}>{t(edit ? 'update' : 'save')}</Button>
                                 </Grid>
                                 <Grid item lg={2} sm={2} xs={4}>
                                     <Button variant={'contained'}
                                             style={{backgroundColor: 'red', color: 'white'}}
-                                            size={'small'} onClick={() => setToggle('Schemas')}>Cancel</Button>
+                                            size={'small'} onClick={() => setToggle('Schemas')}>{t('cancel')}</Button>
                                 </Grid>
                             </Grid>
                         </Grid>

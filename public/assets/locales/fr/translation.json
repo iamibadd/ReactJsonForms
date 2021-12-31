@@ -1,0 +1,23 @@
+{
+  "app_title": "Titre",
+  "dashboard": "Tableau De Bord",
+  "schemas": "Schémas",
+  "data": "Données",
+  "create_schema": "Créer un Schéma",
+  "name": "Nom",
+  "description": "La description",
+  "separator": "Séparateur",
+  "active": "Actif",
+  "createdAt": "Créé à",
+  "actions": "Actions",
+  "edit": "Éditer",
+  "delete": "effacer",
+  "form_submitted": "Formulaire soumis avec succès!",
+  "form_updated": "Formulaire mis à jour avec succès!",
+  "edit_schema": "Modifier le Schéma",
+  "schema_editor": "Éditeur de Schéma",
+  "preview": "Aperçu",
+  "save": "sauver",
+  "update": "Mettre à Jour",
+  "cancel": "Annuler"
+}

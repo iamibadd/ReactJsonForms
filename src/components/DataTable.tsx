@@ -18,25 +18,22 @@ const columns = [
     {
         field: 'schemaId',
         headerName: 'Schema #',
-        disableColumnMenu: true
     },
     {
         field: 'name',
         headerName: 'Schema Name',
         width: 150,
-        editable: true
     },
     {
         field: 'data',
         headerName: 'Data',
         width: 250,
-        editable: true
     },
     {
         field: 'jsonData',
         headerName: 'JSON',
         width: 400,
-        renderCell: ({value}) => <pre>{JSON.stringify(value)}</pre>
+        renderCell: ({value}: any) => <pre>{JSON.stringify(value)}</pre>
     }
 ]
 
@@ -48,7 +45,7 @@ export default function DataTable() {
                 const url = `${backendApi}/api/user/all`;
                 const data = (await axios.get(url)).data;
                 setData(data);
-            } catch (e) {
+            } catch (e: any) {
                 console.log(e.response.data);
             }
         })()

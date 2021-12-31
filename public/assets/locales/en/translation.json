@@ -1,0 +1,23 @@
+{
+  "app_title": "Title",
+  "dashboard": "Dashboard",
+  "schemas": "Schemas",
+  "data": "Data",
+  "create_schema": "Create Schema",
+  "name": "Name",
+  "description": "Description",
+  "separator": "Separator",
+  "active": "Active",
+  "createdAt": "Created At",
+  "actions": "Actions",
+  "edit": "Edit",
+  "delete": "Delete",
+  "form_submitted": "Form submitted successfully!",
+  "form_updated": "Form updated successfully!",
+  "edit_schema": "Edit Schema",
+  "schema_editor": "Schema Editor",
+  "preview": "Preview",
+  "save": "Save",
+  "update": "Update",
+  "cancel": "Cancel"
+}
