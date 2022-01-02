@@ -8,6 +8,7 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import AddIcon from '@mui/icons-material/Add';
 import DataObjectIcon from '@mui/icons-material/DataObject';
 import {Button, Box, List, Divider, IconButton, Toolbar, ListItem, ListItemIcon, ListItemText} from '@mui/material';
+import LanguageSelection from "./LanguageSelection";
 import {useTranslation} from 'react-i18next';
 
 const drawerWidth = 240;
@@ -103,8 +104,8 @@ const SideBar: FC<IProps> = ({setToggle, links, returnToDashboard}: IProps) => {
     };
 
     return (
-        <Box sx={{display: 'flex'}}>
-            <AppBar position="static" sx={{background: '#FFA500'}}
+        <Box sx={{display: 'flex', overflow: 'hidden'}}>
+            <AppBar position="static" sx={{background: '#FFA500', width: '100%'}}
                     open={open}>
                 <Toolbar sx={{display: 'flex', justifyContent: 'space-between'}}>
                     <div>
@@ -124,7 +125,7 @@ const SideBar: FC<IProps> = ({setToggle, links, returnToDashboard}: IProps) => {
                             }
                         }}>{t('dashboard')}</Button>
                     </div>
-                    {/**/}
+                    <LanguageSelection toggle={open}/>
                 </Toolbar>
             </AppBar>
             <Drawer variant="permanent" open={open} sx={{background: '#FFA500'}}>

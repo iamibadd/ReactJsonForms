@@ -31,11 +31,10 @@ const SchemasList: FC<IProps> = ({schemas, setSchema, setSeparator, setSchemaId}
             <Grid container={true} spacing={12}>
                 {filter.length || (schemas && schemas.length) ?
                     (filter.length ? filter : schemas).map((schema, index) =>
-                        <Grid item xs={6} key={index}>
+                        <Grid item xs={4} key={index}>
                             <Card sx={{
                                 backgroundColor: '#858D8D', height: 200, textAlign: 'center', display: "flex",
-                                flexDirection: "column",
-                                justifyContent: "center"
+                                flexDirection: "column", justifyContent: "center", marginBottom: 10
                             }}>
                                 <CardContent>
                                     <Typography sx={{fontSize: 16, fontWeight: 'bold'}} color="text.secondary"

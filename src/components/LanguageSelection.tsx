@@ -6,7 +6,8 @@ import languages from '../utils/languages.json';
 import {Menu, MenuItem} from "@material-ui/core";
 
 
-const LanguageSelection = () => {
+const LanguageSelection = (props: { toggle: boolean }) => {
+    const {toggle} = props;
     const currentLanguageCode: string = cookies.get('i18next') || 'en';
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
@@ -17,7 +18,7 @@ const LanguageSelection = () => {
         setAnchorEl(null);
     };
     return (
-        <>
+        <div style={{marginRight: toggle ? 200 : 0}}>
             <LanguageIcon
                 aria-controls={open ? 'basic-menu' : undefined}
                 aria-haspopup="true"
@@ -37,7 +38,7 @@ const LanguageSelection = () => {
                         handleClose();
                     }}>{lang.name}</MenuItem>)}
             </Menu>
-        </>
+        </div>
     );
 };
 
