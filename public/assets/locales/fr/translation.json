@@ -1,6 +1,7 @@
 {
   "app_title": "Titre",
   "dashboard": "Tableau De Bord",
+  "user_dashboard": "Tableau De Bord Utilisateur",
   "schemas": "Schémas",
   "data": "Données",
   "create_schema": "Créer un Schéma",
@@ -19,5 +20,6 @@
   "preview": "Aperçu",
   "save": "sauver",
   "update": "Mettre à Jour",
-  "cancel": "Annuler"
+  "cancel": "Annuler",
+  "search_by" : "Recherche par schéma ou description"
 }

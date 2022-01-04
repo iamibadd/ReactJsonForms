@@ -1,6 +1,7 @@
 {
   "app_title": "Title",
   "dashboard": "Dashboard",
+  "user_dashboard": "User Dashboard",
   "schemas": "Schemas",
   "data": "Data",
   "create_schema": "Create Schema",
@@ -19,5 +20,6 @@
   "preview": "Preview",
   "save": "Save",
   "update": "Update",
-  "cancel": "Cancel"
+  "cancel": "Cancel",
+  "search_by": "Search by schema or description"
 }

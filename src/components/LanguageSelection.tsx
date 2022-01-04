@@ -18,7 +18,7 @@ const LanguageSelection = (props: { toggle: boolean }) => {
         setAnchorEl(null);
     };
     return (
-        <div style={{marginRight: toggle ? 200 : 0}}>
+        <div style={{marginRight: toggle ? 240 : 0, alignSelf: 'center'}}>
             <LanguageIcon
                 aria-controls={open ? 'basic-menu' : undefined}
                 aria-haspopup="true"

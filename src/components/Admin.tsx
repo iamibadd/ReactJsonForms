@@ -171,7 +171,8 @@ const Admin = () => {
     }
     return (
         <>
-            <SideBar setToggle={setToggle} links={['schemas', 'data']} returnToDashboard={returnToDashboard}/>
+            <SideBar isAdmin={true} setToggle={setToggle} links={['schemas', 'data']}
+                     returnToDashboard={returnToDashboard}/>
             {toggle === 'Schemas' ?
                 <>
                     <Container maxWidth={'md'}>

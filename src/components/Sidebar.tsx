@@ -10,6 +10,7 @@ import DataObjectIcon from '@mui/icons-material/DataObject';
 import {Button, Box, List, Divider, IconButton, Toolbar, ListItem, ListItemIcon, ListItemText} from '@mui/material';
 import LanguageSelection from "./LanguageSelection";
 import {useTranslation} from 'react-i18next';
+import SearchAppBar from "./SearchBar";
 
 const drawerWidth = 240;
 
@@ -44,9 +45,14 @@ const DrawerHeader = styled('div')(({theme}) => ({
 }));
 
 interface IProps {
-    links: Array<any>
+    isAdmin: Boolean;
+    links?: Array<any>;
     setToggle?: (stage: string) => void;
+    setSchema?: (obj: any) => void;
     returnToDashboard?: (stage: string) => void;
+    schema?: any;
+    schemas?: Array<any>;
+    search?: (stage: string) => void;
 }
 
 
@@ -90,7 +96,10 @@ const Drawer = styled(MuiDrawer, {shouldForwardProp: (prop) => prop !== 'open'})
     }),
 );
 
-const SideBar: FC<IProps> = ({setToggle, links, returnToDashboard}: IProps) => {
+const SideBar: FC<IProps> = ({
+                                 setToggle, links, returnToDashboard,
+                                 isAdmin, search, setSchema, schema, schemas
+                             }: IProps) => {
     const {t} = useTranslation();
     const theme = useTheme();
     const [open, setOpen] = React.useState(false);
@@ -109,7 +118,7 @@ const SideBar: FC<IProps> = ({setToggle, links, returnToDashboard}: IProps) => {
                     open={open}>
                 <Toolbar sx={{display: 'flex', justifyContent: 'space-between'}}>
                     <div>
-                        <IconButton
+                        {isAdmin ? <IconButton
                             color="inherit"
                             aria-label="open drawer"
                             onClick={handleDrawerOpen}
@@ -118,17 +127,23 @@ const SideBar: FC<IProps> = ({setToggle, links, returnToDashboard}: IProps) => {
                                 marginRight: '36px',
                                 ...(open && {display: 'none'}),
                             }}
-                        ><MenuIcon/></IconButton>
-                        <Button sx={{my: 2, color: 'white'}} onClick={() => {
-                            if (setToggle) {
+                        ><MenuIcon/></IconButton> : null}
+                        <Button sx={{my: 2, color: 'white', mx: !isAdmin ? 7 : 0}} onClick={() => {
+                            if (setToggle && isAdmin) {
                                 setToggle('Dashboard');
+                            } else if (setSchema) {
+                                setSchema({properties: {}});
                             }
-                        }}>{t('dashboard')}</Button>
+                        }}>{t(isAdmin ? 'dashboard' : 'user_dashboard')}</Button>
                     </div>
-                    <LanguageSelection toggle={open}/>
+                    <div style={{display: 'flex'}}>
+                        {!isAdmin && Object.keys(schema.properties).length < 1 ?
+                            <SearchAppBar search={search} schemas={schemas}/> : null}
+                        <LanguageSelection toggle={open}/>
+                    </div>
                 </Toolbar>
             </AppBar>
-            <Drawer variant="permanent" open={open} sx={{background: '#FFA500'}}>
+            {isAdmin ? <Drawer variant="permanent" open={open} sx={{background: '#FFA500'}}>
                 <DrawerHeader sx={{background: '#FFA500', height: 68.5}}>
                     <IconButton onClick={handleDrawerClose}>
                         {theme.direction === 'rtl' ? <ChevronRightIcon/> : <ChevronLeftIcon/>}
@@ -136,7 +151,7 @@ const SideBar: FC<IProps> = ({setToggle, links, returnToDashboard}: IProps) => {
                 </DrawerHeader>
                 <Divider/>
                 <List sx={{background: '#FFFFFF', marginTop: 1}}>
-                    {links.map((link, index) => (
+                    {links && links.map((link, index) => (
                         <div key={index}>
                             <ListItem button key={link} onClick={() => {
                                 if (link.includes('schemas') && returnToDashboard) {
@@ -145,14 +160,15 @@ const SideBar: FC<IProps> = ({setToggle, links, returnToDashboard}: IProps) => {
                                     setToggle('Users');
                                 }
                             }}>
-                                <ListItemIcon>{link.includes('schema') ? <AddIcon/> : <DataObjectIcon/>}</ListItemIcon>
+                                <ListItemIcon>{link.includes('schema') ? <AddIcon/> :
+                                    <DataObjectIcon/>}</ListItemIcon>
                                 <ListItemText primary={t(link).toUpperCase()}/>
                             </ListItem>
                             <Divider/>
                         </div>
                     ))}
                 </List>
-            </Drawer>
+            </Drawer> : null}
         </Box>
     );
 }
