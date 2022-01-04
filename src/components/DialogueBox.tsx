@@ -5,6 +5,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import {useTranslation} from 'react-i18next';
 
 interface IProps {
     schemaName: String;
@@ -14,6 +15,7 @@ interface IProps {
 }
 
 const DialogueBox: FC<IProps> = ({schemaName, schemaId, setConfirm, deleteSchema}: IProps) => {
+    const {t} = useTranslation();
     return (
         <div>
             <Dialog
@@ -25,17 +27,15 @@ const DialogueBox: FC<IProps> = ({schemaName, schemaId, setConfirm, deleteSchema
                 </DialogTitle>
                 <DialogContent>
                     <DialogContentText id="alert-dialog-description">
-                        Are you sure you want to delete this schema?
+                        {t('deleteWarning')}
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
-                    <Button size={'small'} onClick={() => setConfirm(false)}>Cancel</Button>
+                    <Button size={'small'} onClick={() => setConfirm(false)}>{t('cancel')}</Button>
                     <Button size={'small'} color={'secondary'} sx={{color: 'red'}} onClick={() => {
                         deleteSchema(schemaId);
                         setConfirm(false);
-                    }}>
-                        Delete
-                    </Button>
+                    }}>{t('delete')}</Button>
                 </DialogActions>
             </Dialog>
         </div>

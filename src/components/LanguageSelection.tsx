@@ -1,16 +1,23 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import i18next from 'i18next';
 import cookies from 'js-cookie';
 import LanguageIcon from '@mui/icons-material/Language';
 import languages from '../utils/languages.json';
 import {Menu, MenuItem} from "@material-ui/core";
+import {useTranslation} from 'react-i18next';
 
 
 const LanguageSelection = (props: { toggle: boolean }) => {
     const {toggle} = props;
     const currentLanguageCode: string = cookies.get('i18next') || 'en';
+    const currentLanguage: any = languages.find((l) => l.code === currentLanguageCode);
+    const {t} = useTranslation();
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
+    useEffect(() => {
+        document.body.dir = currentLanguage.dir || 'ltr';
+        document.title = t('app_title');
+    }, [currentLanguage, t]);
     const handleClick = (event: any) => {
         setAnchorEl(event.currentTarget);
     };

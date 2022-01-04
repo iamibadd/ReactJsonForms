@@ -134,7 +134,7 @@ const SideBar: FC<IProps> = ({
                             } else if (setSchema) {
                                 setSchema({properties: {}});
                             }
-                        }}>{t(isAdmin ? 'dashboard' : 'user_dashboard')}</Button>
+                        }}>{t(isAdmin ? 'dashboard' : 'userDashboard')}</Button>
                     </div>
                     <div style={{display: 'flex'}}>
                         {!isAdmin && Object.keys(schema.properties).length < 1 ?
@@ -144,7 +144,7 @@ const SideBar: FC<IProps> = ({
                 </Toolbar>
             </AppBar>
             {isAdmin ? <Drawer variant="permanent" open={open} sx={{background: '#FFA500'}}>
-                <DrawerHeader sx={{background: '#FFA500', height: 68.5}}>
+                <DrawerHeader sx={{background: '#FFA500', height: 68.5, position: "static"}}>
                     <IconButton onClick={handleDrawerClose}>
                         {theme.direction === 'rtl' ? <ChevronRightIcon/> : <ChevronLeftIcon/>}
                     </IconButton>

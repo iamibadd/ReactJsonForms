@@ -5,10 +5,12 @@ import UserForm from "./UserForm";
 import SideBar from "./Sidebar";
 import axios from "axios";
 import {Typography} from "@material-ui/core";
+import {useTranslation} from 'react-i18next';
 
 const backendApi = process.env.REACT_APP_BACKEND_API;
 
 const User = () => {
+    const {t} = useTranslation();
     const [schemas, setSchemas] = useState<any[]>([]);
     const [filter, setFilter] = useState<any[]>([]);
     const [schema, setSchema] = useState({properties: {}});
@@ -42,13 +44,11 @@ const User = () => {
             <SideBar isAdmin={false} search={search} setSchema={setSchema} schema={schema} schemas={schemas}/>
             <br/>
             <Container maxWidth={'lg'}>
-                {success ? <Alert severity="success" onClose={() => setSuccess(false)}>Form submitted
-                    successfully!</Alert> : null}
+                {success ? <Alert severity="success" onClose={() => setSuccess(false)}>{t('formSubmitted')}</Alert> : null}
                 {error ? <Alert severity="error" onClose={() => setError('')}>{error}</Alert> : null}
                 <br/>
                 {schemas.length < 1 ?
-                    <Typography variant={'h6'} color={'secondary'} style={{textAlign: "center"}}>
-                        No schemas added by the admin!</Typography> : null
+                    <Typography variant={'h6'} color={'secondary'} style={{textAlign: "center"}}>{t('schemasUnavailable')}</Typography> : null
                 }
                 {Object.keys(schema.properties).length < 1 ?
                     <SchemasList schemas={filter && filter.length ? filter : schemas} setSchema={setSchema}

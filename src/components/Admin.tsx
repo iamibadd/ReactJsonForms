@@ -108,7 +108,7 @@ const Admin = () => {
                 (await axios.put(url, data));
             }
             setError('');
-            setSuccess(!edit ? 'form_submitted' : 'form_updated');
+            setSuccess(!edit ? 'formSubmitted' : 'formUpdated');
             setToggle('Schemas');
         } catch (e: any) {
             setSuccess('');
@@ -122,7 +122,7 @@ const Admin = () => {
             const url = `${backendApi}/api/admin/edit`;
             (await axios.put(url, data));
             setError('');
-            setSuccess(isActive ? `Schema#${id} deactivated!` : `Schema#${id} activated!`);
+            setSuccess(`${t('schema')}#${id} ${isActive ? t('deactivated') : t('activated')}!`);
         } catch (e: any) {
             setSuccess('');
             setError(e.response.data.message);
@@ -192,7 +192,7 @@ const Admin = () => {
                                             marginBottom: 10
                                         }}
                                         onClick={() => returnToDashboard('Create')}
-                                >{t('create_schema')}</Button>
+                                >{t('createSchema')}</Button>
                             </Grid>
                         </Grid>
                     </Container>
@@ -201,7 +201,7 @@ const Admin = () => {
                 </>
                 : toggle === 'Create' ? <Container maxWidth={'md'}>
                     {edit ? <Typography variant={'h4'} color={'primary'}
-                                        style={{textAlign: 'center'}}>{t('edit_schema')}</Typography> : null}
+                                        style={{textAlign: 'center'}}>{t('editSchema')}</Typography> : null}
                     <br/>
                     {error ? <Alert severity="error" onClose={() => setError('')}>{error}</Alert> : null}
                     <Grid container spacing={3} justifyContent={'center'}>
@@ -224,9 +224,9 @@ const Admin = () => {
                     </Grid>
                     <Grid container justifyContent={'center'} spacing={6}>
                         <Grid item xl={6} lg={6} md={8} sm={8} xs={8}>
-                            <Typography variant={'h5'} color={'textPrimary'}>{t('schema_editor')}</Typography>
+                            <Typography variant={'h5'} color={'textPrimary'}>{t('schemaEditor')}</Typography>
                             <TextField
-                                label={t('schema_editor')}
+                                label={t('schemaEditor')}
                                 variant="filled"
                                 multiline={true}
                                 rows={25}
@@ -247,14 +247,14 @@ const Admin = () => {
                                 cells={materialCells}
                                 data={schemaData}/>
                             <Grid container={true} style={{flexDirection: 'row', justifyContent: 'end'}}>
-                                <Grid item lg={2} sm={2} xs={4}>
+                                <Grid item lg={4} sm={3} xs={3}>
                                     <Button variant={'contained'}
-                                            style={{backgroundColor: 'green', color: 'white', marginLeft: -5}}
+                                            style={{backgroundColor: 'green', color: 'white', width: 120}}
                                             size={'small'} onClick={onSubmit}>{t(edit ? 'update' : 'save')}</Button>
                                 </Grid>
-                                <Grid item lg={2} sm={2} xs={4}>
+                                <Grid item lg={3} sm={3} xs={3}>
                                     <Button variant={'contained'}
-                                            style={{backgroundColor: 'red', color: 'white'}}
+                                            style={{backgroundColor: 'red', color: 'white', width: 120}}
                                             size={'small'} onClick={() => setToggle('Schemas')}>{t('cancel')}</Button>
                                 </Grid>
                             </Grid>

@@ -51,7 +51,7 @@ export default function SearchAppBar(props: any) {
                 <SearchIcon/>
             </SearchIconWrapper>
             <StyledInputBase
-                placeholder={t('search_by')}
+                placeholder={t('searchBy')}
                 inputProps={{'aria-label': 'search'}}
                 onChange={e => search(e.target.value)}
                 disabled={schemas.length === 0}

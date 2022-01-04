@@ -1,5 +1,6 @@
 import React, {FC} from 'react';
 import {Card, CardContent, Typography, Grid, Button} from "@mui/material";
+import {useTranslation} from 'react-i18next';
 
 interface IProps {
     schemas: Array<any>;
@@ -9,6 +10,7 @@ interface IProps {
 }
 
 const SchemasList: FC<IProps> = ({schemas, setSchema, setSeparator, setSchemaId}: IProps) => {
+    const {t} = useTranslation();
     return (
         <>
             <Grid container={true} spacing={12}>
@@ -32,7 +34,7 @@ const SchemasList: FC<IProps> = ({schemas, setSchema, setSeparator, setSchemaId}
                                                 setSchema(schema.schema);
                                                 setSchemaId(schema.id);
                                                 setSeparator(schema.separator);
-                                            }}>Use Schema</Button>
+                                            }}>{t('useSchema')}</Button>
                                 </CardContent>
                             </Card>
                         </Grid>

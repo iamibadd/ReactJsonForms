@@ -12,7 +12,11 @@ const backendApi = process.env.REACT_APP_BACKEND_API;
 function CustomToolbar() {
     return (
         <GridToolbarContainer className={gridClasses.toolbarContainer}>
-            <GridToolbarExport csvOptions={{allColumns: true, includeHeaders: true, fileName: 'Users-Data'}}/>
+            <GridToolbarExport csvOptions={{
+                fields: ['id', 'name', 'description', 'separator', 'isActive', 'createdAt', 'data', 'jsonData'],
+                includeHeaders: true,
+                fileName: `Sheet-${new Date().toISOString().split('T')[0]}`
+            }}/>
         </GridToolbarContainer>
     );
 }
@@ -79,19 +83,20 @@ export default function DataTable(props: any) {
             headerName: '#',
         },
         {
-            field: `${t('name')}`,
-            headerName: 'Schema Name',
+            field: 'name',
+            headerName: t('schemaName'),
             width: 150,
         },
         {
             field: 'data',
-            headerName: 'Data',
+            headerName: t('data'),
             width: 250,
         },
         {
             field: 'jsonData',
             headerName: 'JSON',
             width: 400,
+            valueFormatter: ({value}: any) => JSON.stringify(value),
             renderCell: ({value}: any) => <pre>{JSON.stringify(value)}</pre>
         }
     ]
@@ -118,7 +123,7 @@ export default function DataTable(props: any) {
                 <Grid item={true} lg={12} sm={10} xs={8}>
                     {!data.length ?
                         <Typography variant={'h6'} color={'secondary'} style={{textAlign: "center"}}>
-                            No {user === 'Admin' ? 'schemas' : 'user'} available!</Typography> :
+                            {t(user === 'Admin' ? 'schemasUnavailable' : 'usersUnavailable')}</Typography> :
                         <div style={{height: 400}}>
                             <DataGrid
                                 sx={{
