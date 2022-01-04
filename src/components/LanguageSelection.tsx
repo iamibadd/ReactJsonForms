@@ -16,7 +16,7 @@ const LanguageSelection = (props: { toggle: boolean }) => {
     const open = Boolean(anchorEl);
     useEffect(() => {
         document.body.dir = currentLanguage.dir || 'ltr';
-        document.title = t('app_title');
+        document.title = t('appTitle');
     }, [currentLanguage, t]);
     const handleClick = (event: any) => {
         setAnchorEl(event.currentTarget);
