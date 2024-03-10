@@ -1,0 +1,15 @@
+ARG BUILD_ENV
+
+FROM proact-backend-base-image as common_pre_build
+ONBUILD WORKDIR /proact/celery
+
+FROM common_pre_build as prod_build
+ONBUILD COPY src/ src/
+#ONBUILD COPY data/uploaded/p2p-historical-log.jsonocel data/uploaded/p2p-historical-log.jsonocel
+#ONBUILD COPY data/uploaded/p2p-monitoring-log.jsonocel data/uploaded/p2p-monitoring-log.jsonocel
+#ONBUILD COPY data/uploaded/p2p-post-action-log.jsonocel data/uploaded/p2p-post-action-log.jsonocel
+
+FROM common_pre_build as dev_build
+
+FROM ${BUILD_ENV}_build
+CMD PYTHONUNBUFFERED=1 PROACT_REDIS_HOST=${REDIS_HOST} PROACT_REDIS_PORT=${REDIS_PORT} PYTHONPATH="src/" celery --app=worker.main.app worker --loglevel=INFO

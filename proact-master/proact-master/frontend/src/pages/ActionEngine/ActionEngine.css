@@ -1,0 +1,28 @@
+.charts-container {
+    display: flex;
+    justify-content: space-between;
+    margin: 2rem auto;
+    flex-direction: column;
+  }
+  
+  .chart {
+    box-sizing: border-box;
+    background-color: white;
+    border-style: solid;
+    border-radius: 1rem;
+    border-width: 1px;
+    border-color: rgba(0, 0, 0, 0.1);
+    padding: 0 1rem 2rem 1rem;
+  }
+  
+  .chart-constraint-instance {
+    flex-basis: auto;
+    max-width: 100%;
+    margin-bottom: 1rem;
+  }
+  
+  .chart-action-instance {
+    flex-basis: auto;
+    max-width: 100%;
+    margin-top: 1rem;
+  }

@@ -1,0 +1,16 @@
+ARG BUILD_ENV
+
+FROM proact-backend-base-image as common_pre_build
+ONBUILD WORKDIR /proact/fastapi
+
+FROM common_pre_build as prod_build
+ONBUILD COPY src/ src/
+#ONBUILD COPY data/uploaded/p2p-historical-log.jsonocel data/uploaded/p2p-historical-log.jsonocel
+#ONBUILD COPY data/uploaded/p2p-monitoring-log.jsonocel data/uploaded/p2p-monitoring-log.jsonocel
+#ONBUILD COPY data/uploaded/p2p-post-action-log.jsonocel data/uploaded/p2p-post-action-log.jsonocel
+
+FROM common_pre_build as dev_build
+ONBUILD ENV DEV=1
+
+FROM ${BUILD_ENV}_build
+CMD DEV=${DEV} PYTHONUNBUFFERED=1 PROACT_REDIS_HOST=${REDIS_HOST} PROACT_REDIS_PORT=${REDIS_PORT} PYTHONPATH="src/" uvicorn server.main:app --host 0.0.0.0 --port 8080

@@ -1,0 +1,128 @@
+.Graph-Editor-Container {
+    display: grid;
+    grid-template-rows: auto auto;
+    height: 30vh;
+    width: 100%;
+    background-color: #f0f0f0;
+
+    border-style: solid;
+    border-radius: 1rem;
+    border-width: 1px;
+    border-color: rgba(0, 0, 0, 0.1);
+}
+
+.Graph-Editor-ButtonGroup {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 1rem;
+    width: 100%;
+}
+
+.Graph-Editor-Button {
+    border: none;
+    background-color: rgba(0, 0, 0, 0);
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Add this line */
+    --padding: 0.7rem;
+    padding: var(--padding) 0;
+    height: calc(100% - 2 * var(--padding));
+    color: var(--text-default);
+    text-decoration: none;
+    opacity: 0.8;
+    font-size: 1rem;
+    font-family: "Nunito", sans-serif;
+    transition: opacity 200ms ease-out;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    cursor: pointer; /* Add this line */
+}
+
+.Graph-Editor-Button:visited {
+    color: var(--text-default);
+}
+
+.Graph-Editor-Button>svg {
+    margin-right: 0.5rem;
+}
+
+.Graph-Editor-Button:hover {
+    opacity: 1;
+    box-shadow: 0 .125rem 0 0 rgba(var(--color1), 0.5);
+}
+
+.Graph-Editor-Button--active {
+    opacity: 0.9;
+    box-shadow: 0 .25rem 0 0 rgba(var(--color1), 0.8);
+}
+
+.Graph-Editor-Button--active:hover {
+    box-shadow: 0 .25rem 0 0 rgba(var(--color1), 1);
+}
+
+.Graph-Editor-Button-Icon {
+    width: 1.0rem;
+    height: 1.0rem;
+}
+
+.Graph-Editor-Button-Disabled {
+    cursor: not-allowed; /* Change the cursor to indicate the button is disabled */
+  }
+  
+.Graph-Editor-Button-Icon-Disabled {
+color: gray; /* Change the icon color to gray when the button is disabled */
+}
+
+.Graph-Editor-Help-Container {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.Graph-Editor-Help-Icon {
+    width: 1.2rem;
+    height: 1.2rem;
+}
+
+.Graph-Editor-Help-Tooltip-Wrapper {
+    position: relative;
+    z-index: 1000;
+}
+  
+.Graph-Editor-Help-Tooltip {
+    visibility: hidden;
+    width: 250px;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    text-align: left;
+    border-radius: 5px;
+    padding: 10px;
+    position: absolute;
+    z-index: 1;
+    bottom: 150%; /* Position the tooltip */
+    left: 50%;
+    margin-left: -125px; /* Use half of the tooltip's width to center it */
+    opacity: 0;
+    top: 150%; /* Position the tooltip below the icon */
+}
+  
+  /* .Graph-Editor-Help-Tooltip::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: rgba(0, 0, 0, 0.8) transparent transparent transparent;
+    top: -10px;
+  } */
+  
+.Graph-Editor-Help-Container:hover .Graph-Editor-Help-Tooltip {
+    visibility: visible;
+    opacity: 1;
+}

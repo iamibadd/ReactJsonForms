@@ -1,0 +1,26 @@
+.vis-item.first-window {
+    background-color: #238C6E;
+    border-color: #238C6E;
+}
+.vis-item.second-window {
+    background-color: #F44336;
+    border-color: #F44336;
+}
+.vis-item.structural-operational-analysis {
+    background-color: #4CAF50;
+    border-color: #4CAF50;
+}
+.vis-item.performance-analysis {
+    background-color: #FF9800;
+    border-color: #FF9800;
+}
+
+.placeholder-window {
+    background-color: #ccc;
+    /* Add any other styles you'd like for the placeholder time windows */
+}
+
+/* Add this class to your TimelineComponent.css */
+.rounded-border {
+    border-radius: 4px;
+  }

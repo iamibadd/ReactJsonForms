@@ -1,0 +1,14 @@
+site_name: ProAct
+theme:
+  name: material
+markdown_extensions:
+  - attr_list
+  - md_in_html
+nav:
+  - 'Home': index.md
+  - 'Getting Started': getting_started.md
+  - 'Event Log Management': event_log_management.md
+  - 'Process Analysis': process_analysis.md
+  - 'ProAct: Monitoring Engine': monitoring_engine.md
+  - 'ProAct: Action Engine': action_engine.md
+  - 'ProAct: Impact Analysis': impact_analysis.md

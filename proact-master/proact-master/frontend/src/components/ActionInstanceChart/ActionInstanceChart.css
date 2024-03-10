@@ -1,0 +1,6 @@
+.ActionInstanceChart {
+    flex: 1;
+    min-width: 50%; /* Adjust this value based on your desired layout */
+    margin-bottom: 1rem;
+  }
+  

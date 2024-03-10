@@ -1,0 +1,8 @@
+{
+  "devDependencies": {
+    "@types/uuid": "^9.0.1"
+  },
+  "dependencies": {
+    "react-data-grid": "^7.0.0-beta.28"
+  }
+}
